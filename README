@@ -1,142 +1,118 @@
+<div align="center">
+
 # L’OR VeloCities Index
+
 ### A Mathematical Model of Urban Rhythm
 
-[![Open in Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiosodremat/LOR-VeloCities-Index/blob/main/lor_velocities_index.ipynb)
+<p>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white" alt="NumPy">
+  <img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white" alt="Pandas">
+  <img src="https://img.shields.io/badge/Matplotlib-11557C?style=for-the-badge&logo=python&logoColor=white" alt="Matplotlib">
+</p>
+
+<a href="https://colab.research.google.com/github/fabiosodremat/LOR-VeloCities-Index/blob/main/lor_velocities_index.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Google Colab">
+</a>
+
+<br>
+
+*Understanding the rhythm of cities through mathematics.*
+
+</div>
+
+---
 
 ## Overview
 
-The **L’OR VeloCities Index** is a mathematical modeling project developed to quantify and compare urban rhythm across different cities.
+**How fast does a city live?**
 
-The model explores the relationship between population density and average one-way commuting time, combining these variables into a dimensionless index designed to represent urban temporal pressure.
+The L’OR VeloCities Index is a mathematical modeling project developed to quantify and compare the rhythm of urban environments.
 
-Inspired by research on the cultural perception of time, particularly Robert Levine's work *The Geography of Time* (1997), the project translates demographic and mobility data into a quantitative framework for comparing urban environments.
+The model combines two fundamental dimensions of urban life:
 
-The central idea is that the interaction between spatial density and commuting time provides an interpretable proxy for the intensity of everyday urban life.
+- **Population density:** the spatial concentration of people.
+- **Commuting time:** the temporal cost of urban mobility.
 
-## Objectives
+By combining these variables through nonlinear transformations and normalization, the project constructs a dimensionless index representing relative urban intensity.
 
-- Develop a mathematical model to represent urban rhythm.
-- Combine demographic density and commuting time into a unified metric.
-- Apply nonlinear transformations and geometric normalization.
-- Compare urban environments using a dimensionless index.
-- Translate quantitative urban data into an accessible analytical and communication tool.
+The conceptual framework draws inspiration from Robert V. Levine's research on cultural differences in the perception and organization of time.
 
-## Mathematical Formulation
+## The Mathematical Model
 
-Let \(i\) represent a given city.
-
-The model uses two fundamental variables:
-
-- \(D_i\): Population density, measured in inhabitants per square kilometer (inhabitants/km²).
-- \(T_i\): Average one-way commuting time, measured in minutes.
+Let \(D_i\) denote population density and \(T_i\) the average one-way commuting time for city \(i\).
 
 ### 1. Urban Load Index
 
-The first step defines the Urban Load Index:
+The model begins by defining:
 
-\[
+$$
 URI_i = D_i \cdot T_i
-\]
+$$
 
-This quantity combines spatial density and temporal expenditure into a measure of urban intensity.
+This functional combines spatial density and temporal expenditure into a measure of urban intensity.
 
 ### 2. Nonlinear Transformation
 
-To compress the scale of the resulting values, the model applies a square root transformation:
+A square root transformation is applied:
 
-\[
+$$
 X_i = \sqrt{URI_i}
-\]
+$$
+
+This transformation compresses the scale of the original observations.
 
 ### 3. Geometric Normalization
 
-The geometric mean of the transformed observations is defined as:
+The geometric mean of the transformed observations is:
 
-\[
-X_g =
+$$
+\bar{X}_g =
 \exp\left(
 \frac{1}{n}
 \sum_{i=1}^{n}\ln X_i
 \right)
-\]
+$$
 
-Each observation is then normalized:
+The normalized index is then defined as:
 
-\[
-R_i^{(base)} = \frac{X_i}{X_g}
-\]
+$$
+R_i^{(base)} = \frac{X_i}{\bar{X}_g}
+$$
 
 ### 4. Final Rescaling
 
-The final index is obtained by rescaling the normalized values so that the maximum observation equals 2:
+Finally, the normalized values are rescaled so that the maximum observation equals 2.0:
 
-\[
+$$
 R_i =
-2\cdot
+2 \cdot
 \frac{R_i^{(base)}}{R_{\max}}
-\]
+$$
 
-where
+where:
 
-\[
+$$
 R_{\max} = \max_i R_i^{(base)}
-\]
+$$
 
 The resulting index satisfies:
 
-\[
+$$
 0 < R_i \leq 2
-\]
+$$
 
-The values can be interpreted on a scale analogous to media playback speed:
+The final scale is analogous to media playback speed, providing an accessible way to communicate differences in urban intensity.
 
-- Values close to 2.0x indicate higher urban intensity within the selected sample.
-- Values around 1.0x provide an intermediate reference.
-- Lower values indicate lower measured urban intensity within the sample.
-
-**Mathematical observation:** Since the geometric mean is a common factor in both the normalized observations and their maximum, it cancels algebraically in the final expression. The implementation nevertheless preserves the original sequence of transformations and normalization.
-
-## Dataset and Variables
-
-The dataset contains 14 selected locations, combining large metropolitan areas and smaller destinations.
-
-The variables include:
-
-| Variable | Description |
-|---|---|
-| City | Selected urban location |
-| D | Population density (inhabitants/km²) |
-| T | Average one-way commuting time (minutes) |
-| URI | Urban Load Index |
-| R | Final L’OR VeloCities Index |
-
-The dataset was collected and curated by **Ma. Adriana Alves**.
-
-The research notes identify the following data sources and references:
-
-**Population density**
-- IBGE — Brazilian Census 2022.
-- U.S. Census Bureau — 2023 estimates.
-- Office for National Statistics (ONS), United Kingdom.
-- Statbel, Belgium.
-- Statistics Bureau of Japan.
-
-**Mobility and commuting**
-- Moovit Global Public Transport Report 2024.
-- Numbeo Traffic Index.
-- Local transport authorities and tourism logistics records for selected smaller destinations.
-
-The Shanghai commuting-time figure is identified in the research notes as a value cited in the consolidated Moovit global report.
-
-The original research documentation should be consulted for the specific source references and data definitions associated with each location.
+> **Mathematical note:** The geometric mean appears explicitly in the original normalization procedure. Since it is common to all observations, it cancels algebraically in the final rescaling. The implementation preserves the original computational sequence.
 
 ## Results
 
-The model produces the following ranking:
+The model was applied to 14 selected locations.
 
-| City | Index |
-|---|---:|
-| Mexico City | 2.00x |
+| City | VeloCities Index |
+|:--|--:|
+| Mexico City | **2.00x** |
 | New York City | 1.95x |
 | São Paulo | 1.66x |
 | Rio de Janeiro | 1.42x |
@@ -151,73 +127,79 @@ The model produces the following ranking:
 | Capri | 0.35x |
 | Santorini | 0.16x |
 
-These values represent comparisons within the selected dataset. They are not universal measures of the speed of life in each city.
+The results are relative to the selected sample. Mexico City establishes the upper reference value of 2.0x.
 
 ## Computational Implementation
 
-The model was implemented in Python using:
+The complete model was implemented in Python using:
 
-- **NumPy** — numerical operations and mathematical transformations.
-- **Pandas** — dataset organization and data manipulation.
-- **Matplotlib** — graphical representation of the results.
+| Technology | Purpose |
+|:--|:--|
+| Python | Computational implementation |
+| NumPy | Numerical operations and mathematical transformations |
+| Pandas | Dataset organization and manipulation |
+| Matplotlib | Data visualization |
 
-The notebook includes:
+The Jupyter Notebook includes:
+
 - Dataset construction.
-- Calculation of the Urban Load Index.
-- Square root transformation.
+- Urban Load Index calculation.
+- Nonlinear transformation.
 - Geometric mean normalization.
-- Final index rescaling.
+- Final index computation.
 - Ranking table.
-- Scatter plot relating URI and the final index.
+- Scatter plot of the relationship between URI and the final index.
 
-## Methodological Considerations
+## Conceptual Background
 
-The L’OR VeloCities Index is a constructed comparative metric based on two observable variables.
+The theoretical inspiration comes from:
 
-Its interpretation depends on the consistency and comparability of the underlying population density and commuting-time data.
+**Levine, R. V. (1997).** *A Geography of Time: The Temporal Misadventures of a Social Psychologist.*
 
-Important considerations include:
+The research explores how cultural and geographical contexts influence the perception and organization of time.
 
-- Administrative boundaries may differ between cities.
-- Population density depends on the territorial definition adopted.
-- Commuting-time sources may use different collection methods.
-- Smaller destinations may require different mobility data sources.
-- The index is relative to the cities included in the selected sample.
-
-The model should therefore be understood as an analytical and communication framework rather than an empirically validated universal measure of urban rhythm.
-
-## Theoretical Background
-
-The conceptual framework draws inspiration from Robert V. Levine's research on the relationship between culture, geography and the perception of time.
-
-**Reference:**
-
-Levine, R. V. (1997). *A Geography of Time: The Temporal Misadventures of a Social Psychologist*. Basic Books.
-
-The project explores the distinction between clock time and event time, connecting urban temporal pressure with the everyday experience of commuting and the possibility of taking a pause.
+The VeloCities project connects these ideas with observable urban characteristics, translating demographic and mobility data into a quantitative representation of urban rhythm.
 
 ## Contributions
 
 **Adriana Alves**
 - Strategic conception and research direction.
-- Data curation and research methodology.
-- Development of the conceptual framework and communication strategy.
+- Theoretical and journalistic research.
+- Data collection and curation.
+- Conceptual framework and communication strategy.
 
 **Fábio Sodré Rocha, PhD in Mathematics**
 - Mathematical formulation and development of the quantitative model.
-- Definition of the mathematical transformations and normalization procedure.
-- Computational implementation and numerical analysis in Python.
+- Definition of mathematical transformations and normalization procedures.
+- Computational implementation in Python.
+- Numerical analysis and visualization.
 
 The project combines strategic research, data curation, mathematical modeling and computational development.
 
-## Repository
+## Repository Structure
 
-The complete computational implementation is available in the Jupyter Notebook:
+```text
+LOR-VeloCities-Index/
+│
+├── README.md
+│
+└── lor_velocities_index.ipynb
+```
 
-[`lor_velocities_index.ipynb`](lor_velocities_index.ipynb)
+## Methodological Considerations
 
-[Open the notebook in Google Colab](https://colab.research.google.com/github/fabiosodremat/LOR-VeloCities-Index/blob/main/lor_velocities_index.ipynb)
+The index is a constructed comparative metric based on population density and average one-way commuting time.
+
+Its interpretation depends on the consistency and comparability of the underlying data, including geographical boundaries, population definitions and commuting-time sources.
+
+The results should be interpreted as comparisons within the selected dataset, rather than as universal or empirically validated measurements of urban rhythm.
 
 ---
 
-**L’OR VeloCities Index — A mathematical approach to understanding the rhythm of cities.**
+<div align="center">
+
+**L’OR VeloCities Index**
+
+*Mathematics, data and the rhythm of urban life.*
+
+</div>
